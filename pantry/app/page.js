@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Stack, Typography,Button, ButtonGroup } from "@mui/material";
+import { Box, Stack, Typography, Button, ButtonGroup } from "@mui/material";
 import { firestore } from '@/firebase';
 import { collection, getDocs, query } from 'firebase/firestore';
 import { useEffect, useState } from "react";
@@ -33,19 +33,22 @@ export default function Home() {
       display="flex"
       justifyContent="center"
       flexDirection="column"
+      gap = {2}
       alignItems="center"
     >
-      <Box border="1px solid #333">
-        <ButtonGroup
+      <ButtonGroup
           disableElevation
           variant="contained"
           aria-label="Disabled button group"
-        >
-          <Button>One</Button>
-         <Button>Two</Button>
+          
+      >
+          <Button>Add</Button>
+          <Button>REMOVE</Button>
       </ButtonGroup>
+      <Box border="1px solid #333" width="800px">
+        
         <Box
-          width="800px"
+          width="100%"
           height="100px"
           bgcolor="#FEEAFA"
           display="flex"
@@ -58,7 +61,7 @@ export default function Home() {
           </Typography>
         </Box>
         <Stack
-          width="800px"
+          width="100%"
           height="300px"
           spacing={0.5}
           overflow="scroll"
