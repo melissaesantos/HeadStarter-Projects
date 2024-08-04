@@ -12,7 +12,12 @@ export default function Home() {
     display = {'flex'}
     justifyContent = {'center'}
     alignItems={'center'}
-  > <Stack width = '800px' height = '300px' spacing = {2} overflow = {'scroll'}> 
+  > 
+  <Box width = "800px" height = "800px"> 
+  
+  
+  </Box>
+  <Stack width = '800px' height = '300px' spacing = {2} overflow = {'scroll'}> 
     {items.map((i) => (
       <Box 
       key= {i}
@@ -20,13 +25,16 @@ export default function Home() {
       height = "300px"
       display = {'flex'}
       justifyContent = {'center'}
+      alignItems={'center'}
       bgcolor = {'#8DA9C4'}
     >
-      <Typography variant = {'h4'}
+      <Typography variant = {'h2'}
       color = {'#333'}
       textAlign = {'center'}
-      fontWeight = {'bold'}
-      >{i}</Typography>
+      
+      >{
+        i.charAt(0).toUpperCase() + i.slice(1)
+      }</Typography>
       
     </Box>
     ))}
