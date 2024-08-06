@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Stack, Typography, Button, Modal, handleClose, handleOpen } from "@mui/material";
+import { Box, Stack, Typography, Button, Modal, handleClose, handleOpen, TextField } from "@mui/material";
 import { firestore } from '@/firebase';
 import { collection, getDocs, query } from 'firebase/firestore';
 import { useEffect, useState } from "react";
@@ -15,6 +15,10 @@ const style = {
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
+
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 3,
 };
 export default function Home() {
   const [pantry, setPantry] = useState([]);
@@ -37,7 +41,7 @@ export default function Home() {
       } catch (error) {
         console.error("Error fetching pantry items:", error);
       }
-    };
+    }
     updatePantry();
   }, []);
 
@@ -62,9 +66,14 @@ export default function Home() {
       <Typography id="modal-modal-title" variant="h6" component="h2">
         Add Item
       </Typography>
+      <Stack width = "100%"  direction={'row'} spacing = {1}>
+            <TextField id = "outlined-basic" label = "Item" variant = "outlined" fullWidth />
+           <Button variant = "outlined">ADD</Button>
+          </Stack>
       
     </Box>
   </Modal>
+  
       <Box border="1px solid #333" width="800px">
         
         <Box
@@ -76,14 +85,15 @@ export default function Home() {
           alignItems="center"
           border="1px solid #333"
         >
-          <Typography variant="h3" color="#000" textAlign="center">
+          <Typography variant="h4" color="#000" textAlign="left">
             Pantry Items
           </Typography>
+         
         </Box>
         <Stack
           width="100%"
           height="300px"
-          spacing={0.5}
+          spacing={.5}
           overflow="scroll"
         >
           {pantry.map((i) => (
