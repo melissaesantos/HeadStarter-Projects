@@ -58,6 +58,7 @@ export default function Home() {
       console.error("Error adding document: ", e);
     }
   };
+  
 
   return (
     <Box
@@ -133,9 +134,10 @@ export default function Home() {
               minHeight="150px"
               display={"flex"}
               justifyContent="space-between"
-              padding = {2}
               alignItems="center"
               bgcolor="#DEE2FF"
+              paddingX = {5}
+            
             >
               <Typography variant="h4" color="#333" textAlign="center">
                 {i.charAt(0).toUpperCase() + i.slice(1)}
