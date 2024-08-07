@@ -33,7 +33,7 @@ export default function Home() {
       const docs = await getDocs(snapshot);
       const pantryList = [];
       docs.forEach((doc) => {
-        pantryList.push(doc.id); // or doc.data().itemName if you want specific fields
+        pantryList.push({name:doc.id, count: doc.data()}); // or doc.data().itemName if you want specific fields
       });
       console.log(pantryList);
       setPantry(pantryList);
