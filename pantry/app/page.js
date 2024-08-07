@@ -126,6 +126,8 @@ export default function Home() {
           overflow="scroll"
         >
           {pantry.map((i) => (
+            <Stack key= {i} direction = {'row'} spacing = {2} justifyContent={'center'}
+            alignContent={'space-between'} >
             <Box
               key={i}
               width="100%"
@@ -139,6 +141,10 @@ export default function Home() {
                 {i.charAt(0).toUpperCase() + i.slice(1)}
               </Typography>
             </Box>
+            <Button variant= 'contained' onClick={() => removeItem(i)}>
+                Remove
+            </Button>
+            </Stack>
           ))}
         </Stack>
       </Box>
