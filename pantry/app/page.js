@@ -2,7 +2,7 @@
 
 import { Box, Stack, Typography, Button, Modal, TextField } from "@mui/material";
 import { firestore } from '@/firebase';
-import { collection, getDocs, query, addDoc,deleteDoc ,doc, setDoc,docSnap,getDoc} from 'firebase/firestore';
+import { collection, getDocs, query, deleteDoc, doc, setDoc, getDoc } from 'firebase/firestore';
 import { useEffect, useState } from "react";
 
 const style = {
@@ -27,13 +27,14 @@ export default function Home() {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
   const updatePantry = async () => {
     try {
       const snapshot = query(collection(firestore, 'pantry'));
       const docs = await getDocs(snapshot);
       const pantryList = [];
       docs.forEach((doc) => {
-        pantryList.push({name:doc.id, ...doc.data()}); // or doc.data().itemName if you want specific fields
+        pantryList.push({ name: doc.id, ...doc.data() });
       });
       console.log(pantryList);
       setPantry(pantryList);
@@ -41,34 +42,40 @@ export default function Home() {
       console.error("Error fetching pantry items:", error);
     }
   };
+
   useEffect(() => {
     updatePantry();
   }, []);
 
   const addItem = async (itemName) => {
-    const docRef =  doc(collection(firestore, 'pantry'),itemName)
-    //lets check if it already exists to update the quantity 
-    const docSnap = await getDoc(docRef)
-    if (docSnap.exists() ){
-      const {count} = docSnap.data()
-      await setDoc(docRef,{count:count + 1})
-      await updatePantry()
-      return
-    }
-    else{ 
-      await setDoc(docRef,{count:1})
-    }
-    await updatePantry()
+    const docRef = doc(collection(firestore, 'pantry'), itemName);
+    const docSnap = await getDoc(docRef);
 
-  }
-  const removeItem = async(itemName) => {
-    const docRef = doc(collection(firestore,"pantry"),itemName)
-    await deleteDoc(docRef)
-    await updatePantry()
-    
-    
-  }
+    if (docSnap.exists()) {
+      const { count } = docSnap.data();
+      await setDoc(docRef, { count: count + 1 });
+    } else {
+      await setDoc(docRef, { count: 1 });
+    }
 
+    await updatePantry();
+  };
+
+  const removeItem = async (itemName) => {
+    const docRef = doc(collection(firestore, "pantry"), itemName);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const { count } = docSnap.data();
+      if (count > 1) {
+        await setDoc(docRef, { count: count - 1 });
+      } else {
+        await deleteDoc(docRef);
+      }
+    }
+
+    await updatePantry();
+  };
 
   return (
     <Box
@@ -104,8 +111,6 @@ export default function Home() {
               variant="contained"
               onClick={() => {
                 addItem(itemName);
-                //this makes what we previously typed in the box disappear for the next time
-                //we want to add something
                 setItemName('');
                 handleClose();
               }}
@@ -136,8 +141,7 @@ export default function Home() {
           spacing={0.5}
           overflow="scroll"
         >
-          {pantry.map(({name,count}) => (
-       
+          {pantry.map(({ name, count }) => (
             <Box
               key={name}
               width="100%"
@@ -146,20 +150,17 @@ export default function Home() {
               justifyContent="space-between"
               alignItems="center"
               bgcolor="#DEE2FF"
-              paddingX = {5}
-            
+              paddingX={5}
             >
               <Typography variant="h4" color="#333" textAlign="center">
                 {name.charAt(0).toUpperCase() + name.slice(1)}
               </Typography>
-
-              <Typography variant = {'h6'} color = {'#333'} textAlgin = "center">
+              <Typography variant={'h6'} color={'#333'} textAlign="center">
                 Quantity: {count}
               </Typography>
-  
-            <Button variant= 'contained' onClick={() => removeItem(name)}>
+              <Button variant='contained' onClick={() => removeItem(name)}>
                 Remove
-            </Button>
+              </Button>
             </Box>
           ))}
         </Stack>
