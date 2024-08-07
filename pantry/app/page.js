@@ -2,7 +2,7 @@
 
 import { Box, Stack, Typography, Button, Modal, TextField } from "@mui/material";
 import { firestore } from '@/firebase';
-import { collection, getDocs, query, addDoc,deleteDoc } from 'firebase/firestore';
+import { collection, getDocs, query, addDoc,deleteDoc ,doc, setDoc} from 'firebase/firestore';
 import { useEffect, useState } from "react";
 
 const style = {
@@ -46,20 +46,12 @@ export default function Home() {
   }, []);
 
   const addItem = async (itemName) => {
-    if (!itemName) return;
-
-    try {
-      const docRef = await addDoc(collection(firestore, "pantry"), {
-        name: itemName
-      });
-      setPantry([...pantry, itemName]);
-      console.log("Document written with ID: ", docRef.id);
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
+    const docRef = await doc(collection(firestore, 'pantry'),itemName)
+     await setDoc(docRef,{})
+     updatePantry()
   }
   const removeItem = async(itemName) => {
-    const docRef = doc(collecion(firestore,"pantry"),itemName)
+    const docRef = doc(collection(firestore,"pantry"),itemName)
     await deleteDoc(docRef)
     updatePantry()
   }
