@@ -27,22 +27,21 @@ export default function Home() {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
+  const updatePantry = async () => {
+    try {
+      const snapshot = query(collection(firestore, 'pantry'));
+      const docs = await getDocs(snapshot);
+      const pantryList = [];
+      docs.forEach((doc) => {
+        pantryList.push(doc.id); // or doc.data().itemName if you want specific fields
+      });
+      console.log(pantryList);
+      setPantry(pantryList);
+    } catch (error) {
+      console.error("Error fetching pantry items:", error);
+    }
+  };
   useEffect(() => {
-    const updatePantry = async () => {
-      try {
-        const snapshot = query(collection(firestore, 'pantry'));
-        const docs = await getDocs(snapshot);
-        const pantryList = [];
-        docs.forEach((doc) => {
-          pantryList.push(doc.id); // or doc.data().itemName if you want specific fields
-        });
-        console.log(pantryList);
-        setPantry(pantryList);
-      } catch (error) {
-        console.error("Error fetching pantry items:", error);
-      }
-    };
     updatePantry();
   }, []);
 
@@ -94,6 +93,8 @@ export default function Home() {
               variant="contained"
               onClick={() => {
                 addItem(itemName);
+                //this makes what we previously typed in the box disappear for the next time
+                //we want to add something
                 setItemName('');
                 handleClose();
               }}
