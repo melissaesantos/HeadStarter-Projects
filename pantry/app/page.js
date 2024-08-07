@@ -46,11 +46,20 @@ export default function Home() {
   }, []);
 
   const addItem = async (itemName) => {
-    const docRef = await doc(collection(firestore, 'pantry'),itemName)
+    const docRef =  doc(collection(firestore, 'pantry'),itemName)
+    //lets check if it already exists to update the quantity 
     const docSnap = await getDoc(docRef)
-    console.log(docSnap.data())
-    await setDoc(docRef,{count:1})
+    if (docSnap.exists() ){
+      const {count} = docSnap.data()
+      await setDoc(docRef,{count:count + 1})
+      await updatePantry()
+      return
+    }
+    else{ 
+      await setDoc(docRef,{count:1})
+    }
     await updatePantry()
+
   }
   const removeItem = async(itemName) => {
     const docRef = doc(collection(firestore,"pantry"),itemName)
