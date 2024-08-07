@@ -46,8 +46,17 @@ export default function Home() {
   }, []);
 
   const addItem = async (itemName) => {
-    await collection('pantry').doc(itemName)
-    updatePantry()
+    if (!itemName) return;
+
+    try {
+      const docRef = await addDoc(collection(firestore, "pantry"), {
+        name: itemName
+      });
+      setPantry([...pantry, itemName]);
+      console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
   };
 
   return (
