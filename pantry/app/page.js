@@ -2,7 +2,7 @@
 
 import { Box, Stack, Typography, Button, Modal, TextField } from "@mui/material";
 import { firestore } from '@/firebase';
-import { collection, getDocs, query, addDoc,deleteDoc ,doc, setDoc} from 'firebase/firestore';
+import { collection, getDocs, query, addDoc,deleteDoc ,doc, setDoc,docSnap,getDoc} from 'firebase/firestore';
 import { useEffect, useState } from "react";
 
 const style = {
@@ -33,7 +33,7 @@ export default function Home() {
       const docs = await getDocs(snapshot);
       const pantryList = [];
       docs.forEach((doc) => {
-        pantryList.push({name:doc.id, count: doc.data()}); // or doc.data().itemName if you want specific fields
+        pantryList.push({name:doc.id, ...doc.data()}); // or doc.data().itemName if you want specific fields
       });
       console.log(pantryList);
       setPantry(pantryList);
@@ -47,8 +47,10 @@ export default function Home() {
 
   const addItem = async (itemName) => {
     const docRef = await doc(collection(firestore, 'pantry'),itemName)
-     await setDoc(docRef,{})
-     await updatePantry()
+    const docSnap = await getDoc(docRef)
+    console.log(docSnap.data())
+    await setDoc(docRef,{count:1})
+    await updatePantry()
   }
   const removeItem = async(itemName) => {
     const docRef = doc(collection(firestore,"pantry"),itemName)
@@ -125,10 +127,10 @@ export default function Home() {
           spacing={0.5}
           overflow="scroll"
         >
-          {pantry.map((i) => (
+          {pantry.map(({name,count}) => (
        
             <Box
-              key={i}
+              key={name}
               width="100%"
               minHeight="150px"
               display={"flex"}
@@ -139,10 +141,14 @@ export default function Home() {
             
             >
               <Typography variant="h4" color="#333" textAlign="center">
-                {i.charAt(0).toUpperCase() + i.slice(1)}
+                {name.charAt(0).toUpperCase() + name.slice(1)}
+              </Typography>
+
+              <Typography variant = {'h6'} color = {'#333'} textAlgin = "center">
+                Quantity: {count}
               </Typography>
   
-            <Button variant= 'contained' onClick={() => removeItem(i)}>
+            <Button variant= 'contained' onClick={() => removeItem(name)}>
                 Remove
             </Button>
             </Box>
