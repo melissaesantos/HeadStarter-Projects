@@ -126,25 +126,25 @@ export default function Home() {
           overflow="scroll"
         >
           {pantry.map((i) => (
-            <Stack key= {i} direction = {'row'} spacing = {2} justifyContent={'center'}
-            alignContent={'space-between'} >
+       
             <Box
               key={i}
               width="100%"
-              minHeight="100px"
-              display="flex"
-              justifyContent="center"
+              minHeight="150px"
+              display={"flex"}
+              justifyContent="space-between"
+              padding = {2}
               alignItems="center"
               bgcolor="#DEE2FF"
             >
               <Typography variant="h4" color="#333" textAlign="center">
                 {i.charAt(0).toUpperCase() + i.slice(1)}
               </Typography>
-            </Box>
+  
             <Button variant= 'contained' onClick={() => removeItem(i)}>
                 Remove
             </Button>
-            </Stack>
+            </Box>
           ))}
         </Stack>
       </Box>
